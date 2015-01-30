@@ -15,13 +15,15 @@ class bst{
         private Node(String k){
         	// TODO Instantialize a new Node with keyword k.
             this.keyword = k;
-            this.record = new Record
+            this.l = null;
+            this.r = null;
         }
 
         private void update(Record r){
         	//TODO Adds the Record r to the linked list of records. You do not have to check if the record is already in the list.
         	//HINT: Add the Record r to the front of your linked list.
-
+            this.record = r;
+            this.size++;
         }
 
        
@@ -35,6 +37,13 @@ class bst{
         Record recordToAdd = new Record(fd.id, fd.title, fd.author, null);
         //TODO Write a recursive insertion that adds recordToAdd to the list of records for the node associated
         //with keyword. If there is no node, this code should add the node.
+
+        if(null == this.root)
+        {
+            Node n = new Node(keyword);
+            n.update(recordToAdd);
+            this.root = n;
+        }
     }
     
     public boolean contains(String keyword){
