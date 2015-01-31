@@ -1,9 +1,9 @@
-class bst{
-    
+class bst
+{
     Node root;
 
-    private class Node{
-    	
+    private class Node
+    {
     	// These attributes of the Node class will not be sufficient for those attempting the AVL extra credit.
     	// You are free to add extra attributes as you see fit, but do not remove attributes given as it will mess with help code.
         String keyword;
@@ -21,40 +21,131 @@ class bst{
 
         private void update(Record r){
         	//TODO Adds the Record r to the linked list of records. You do not have to check if the record is already in the list.
-        	//HINT: Add the Record r to the front of your linked list.
+        	//HINT: Add the Record r to the front of your linked list
+            Record temp = this.record;
             this.record = r;
+            this.record.next = temp;
             this.size++;
         }
-
-       
     }
 
-    public bst(){
+    /**
+     * Constructor
+     */
+    public bst()
+    {
         this.root = null;
     }
-      
-    public void insert(String keyword, FileData fd){
-        Record recordToAdd = new Record(fd.id, fd.title, fd.author, null);
-        //TODO Write a recursive insertion that adds recordToAdd to the list of records for the node associated
-        //with keyword. If there is no node, this code should add the node.
 
-        if(null == this.root)
+    /**
+     * Recursive function that adds a record to a list of records for the node associated
+     * with keyword. Create a new node if null;
+     * @param keyword the keyword associated to record
+     * @param fd the data of a record
+     */
+    public void insert(String keyword, FileData fd)
+    {
+        Record recordToAdd = new Record(fd.id, fd.title, fd.author, null);
+
+        this.root = insert(this.root, keyword, recordToAdd);
+    }
+
+    /**
+     * Internal method
+     * @param current
+     * @param keyword
+     * @param record
+     * @return
+     */
+    private Node insert(Node current, String keyword, Record record)
+    {
+        if(null == current)
         {
             Node n = new Node(keyword);
-            n.update(recordToAdd);
-            this.root = n;
+            n.update(record);
+            current = n;
         }
+        else
+        {
+            int determinant = current.keyword.compareTo(keyword);
+
+            if(determinant > 0)
+            {
+                current.l = insert(current.l, keyword, record);
+            }
+            else if(determinant < 0)
+            {
+                current.r = insert(current.r, keyword, record);
+            }
+            else
+            {
+                current.update(record);
+            }
+        }
+
+        return current;
     }
     
-    public boolean contains(String keyword){
+    public boolean contains(String keyword)
+    {
     	//TODO Write a recursive function which returns true if a particular keyword exists in the bst
-    	return false;
+        return contains(this.root, keyword);
     }
 
-    public Record get_records(String keyword){
-        //TODO Returns the first record for a particular keyword. This record will link to other records
-    	//If the keyword is not in the bst, it should return null.
-    	return null;
+    private boolean contains(Node current, String keyword)
+    {
+        if(null == current)
+        {
+            return false;
+        }
+
+        int determinant = current.keyword.compareTo(keyword);
+
+        if(determinant > 0)
+        {
+            return contains(current.l, keyword);
+        }
+        else if(determinant < 0)
+        {
+            return contains(current.r, keyword);
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /**
+     * @param keyword
+     * @return the first record associated to the keyword, which is linked to other records. Or
+     * return null if keyword does not exist in the binary search tree.
+     */
+    public Record get_records(String keyword)
+    {
+    	return get_records(this.root, keyword);
+    }
+
+    private Record get_records(Node current, String keyword)
+    {
+        if(null == current)
+        {
+            return null;
+        }
+
+        int determinant = current.keyword.compareTo(keyword);
+
+        if(determinant > 0)
+        {
+            return get_records(current.l, keyword);
+        }
+        else if(determinant < 0)
+        {
+            return get_records(current.r, keyword);
+        }
+        else
+        {
+            return current.record;
+        }
     }
 
     public void delete(String keyword){
@@ -67,7 +158,7 @@ class bst{
     }
 
     private void print(Node t){
-        if (t!=null){
+        if(t!=null){
             print(t.l);
             System.out.println(t.keyword);
             Record r = t.record;
