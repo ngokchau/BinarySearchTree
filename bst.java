@@ -50,45 +50,41 @@ class bst
         this.root = insert(this.root, keyword, recordToAdd);
     }
 
-    /**
-     * Internal method
-     * @param current
-     * @param keyword
-     * @param record
-     * @return
-     */
-    private Node insert(Node current, String keyword, Record record)
+    private Node insert(Node subtree, String keyword, Record record)
     {
-        if(null == current)
+        if(null == subtree)
         {
             Node n = new Node(keyword);
             n.update(record);
-            current = n;
+            subtree = n;
         }
         else
         {
-            int determinant = current.keyword.compareTo(keyword);
+            int determinant = subtree.keyword.compareTo(keyword);
 
             if(determinant > 0)
             {
-                current.l = insert(current.l, keyword, record);
+                subtree.l = insert(subtree.l, keyword, record);
             }
             else if(determinant < 0)
             {
-                current.r = insert(current.r, keyword, record);
+                subtree.r = insert(subtree.r, keyword, record);
             }
             else
             {
-                current.update(record);
+                subtree.update(record);
             }
         }
 
-        return current;
+        return subtree;
     }
-    
+
+    /**
+     * @param keyword
+     * @return
+     */
     public boolean contains(String keyword)
     {
-    	//TODO Write a recursive function which returns true if a particular keyword exists in the bst
         return contains(this.root, keyword);
     }
 
@@ -148,24 +144,91 @@ class bst
         }
     }
 
-    public void delete(String keyword){
+    public void delete(String keyword)
+    {
+        this.root = delete(this.root, keyword);
     	//TODO Write a recursive function which removes the Node with keyword from the binary search tree.
     	//You may not use lazy deletion and if the keyword is not in the bst, the function should do nothing.
     }
 
+    private Node delete(Node current, String keyword)
+    {
+        if(null == current)
+        {
+            return null;
+        }
+
+        int determinant = current.keyword.compareTo(keyword);
+
+        if(determinant > 0)
+        {
+            current.l = delete(current.l, keyword);
+        }
+        else if(determinant < 0)
+        {
+            current.r = delete(current.r, keyword);
+        }
+        else if(null != current.l && null != current.r)
+        {
+            Node rightMin = find_right_min(current.r);
+
+            current.keyword = rightMin.keyword;
+            current.record = rightMin.record;
+            current.size = rightMin.size;
+            current.r = delete(current.r, current.keyword);
+        }
+        else
+        {
+            if(null != current.l)
+            {
+                current = current.l;
+            }
+            else
+            {
+                current = current.r;
+            }
+        }
+
+        return current;
+    }
+
+    private Node find_right_min(Node current)
+    {
+        if(null != current.l)
+        {
+            return find_right_min(current.l);
+        }
+        else
+        {
+            return current;
+        }
+    }
+
+    /**
+     * Print the tree
+     */
     public void print(){
         print(root);
     }
 
-    private void print(Node t){
-        if(t!=null){
+    /**
+     * Print a node of the tree
+     * @param t
+     */
+    private void print(Node t)
+    {
+        if(t!=null)
+        {
             print(t.l);
             System.out.println(t.keyword);
             Record r = t.record;
-            while(r != null){
+
+            while(r != null)
+            {
                 System.out.printf("\t%s\n",r.title);
                 r = r.next;
             }
+
             print(t.r);
         } 
     }
