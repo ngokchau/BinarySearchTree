@@ -12,16 +12,23 @@ class bst
         Node l;
         Node r;
 
-        private Node(String k){
-        	// TODO Instantialize a new Node with keyword k.
+        /**
+         * Constructor that instantialize a new Node with keyword k.
+         * @param k
+         */
+        private Node(String k)
+        {
             this.keyword = k;
             this.l = null;
             this.r = null;
         }
 
-        private void update(Record r){
-        	//TODO Adds the Record r to the linked list of records. You do not have to check if the record is already in the list.
-        	//HINT: Add the Record r to the front of your linked list
+        /**
+         * Adds Record r to linked list structure by appending to the front of the list.
+         * @param r
+         */
+        private void update(Record r)
+        {
             Record temp = this.record;
             this.record = r;
             this.record.next = temp;
@@ -170,11 +177,11 @@ class bst
         }
         else if(null != current.l && null != current.r)
         {
-            Node rightMin = find_right_min(current.r);
+            Node min = find_min(current.r);
 
-            current.keyword = rightMin.keyword;
-            current.record = rightMin.record;
-            current.size = rightMin.size;
+            current.keyword = min.keyword;
+            current.record = min.record;
+            current.size = min.size;
             current.r = delete(current.r, current.keyword);
         }
         else
@@ -183,20 +190,24 @@ class bst
             {
                 current = current.l;
             }
-            else
+            else if(null != current.r)
             {
                 current = current.r;
+            }
+            else
+            {
+                current = null;
             }
         }
 
         return current;
     }
 
-    private Node find_right_min(Node current)
+    private Node find_min(Node current)
     {
         if(null != current.l)
         {
-            return find_right_min(current.l);
+            return find_min(current.l);
         }
         else
         {
