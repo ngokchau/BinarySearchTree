@@ -143,5 +143,7 @@ class test{
             
             T.a.print(); //Prints bst after the 3 deletions
             // THIS AREA IS FOR YOUR USE TO HELP TEST THAT YOUR BST WORKS
+
+			T.a.contains("hello");
     }
 }

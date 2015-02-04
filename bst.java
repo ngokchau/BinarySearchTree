@@ -14,7 +14,7 @@ class bst
 
         /**
          * Constructor that instantialize a new Node with keyword k.
-         * @param k
+         * @param k they keyword of a node
          */
         private Node(String k)
         {
@@ -25,7 +25,7 @@ class bst
 
         /**
          * Adds Record r to linked list structure by appending to the front of the list.
-         * @param r
+         * @param r they record to be appended to the front of the list.
          */
         private void update(Record r)
         {
@@ -87,8 +87,9 @@ class bst
     }
 
     /**
-     * @param keyword
-     * @return
+     * Recursive function that returns true if keyword is in tree, false otherwise.
+     * @param keyword the keyword to lookup in the tree
+     * @return boolean
      */
     public boolean contains(String keyword)
     {
@@ -119,7 +120,7 @@ class bst
     }
 
     /**
-     * @param keyword
+     * @param keyword they key to retrieve the records
      * @return the first record associated to the keyword, which is linked to other records. Or
      * return null if keyword does not exist in the binary search tree.
      */
@@ -151,11 +152,13 @@ class bst
         }
     }
 
+    /**
+     * Recursive function to delete node
+     * @param keyword the node with the keyword to delete.
+     */
     public void delete(String keyword)
     {
         this.root = delete(this.root, keyword);
-    	//TODO Write a recursive function which removes the Node with keyword from the binary search tree.
-    	//You may not use lazy deletion and if the keyword is not in the bst, the function should do nothing.
     }
 
     private Node delete(Node current, String keyword)
@@ -203,16 +206,14 @@ class bst
         return current;
     }
 
+    /**
+     * Internal functions that finds the left most node of a right child for the delete function
+     * @param current the current node
+     * @return the left most node of a right child
+     */
     private Node find_min(Node current)
     {
-        if(null != current.l)
-        {
-            return find_min(current.l);
-        }
-        else
-        {
-            return current;
-        }
+        return (null != current.l) ? find_min(current.l) : current;
     }
 
     /**
@@ -224,7 +225,7 @@ class bst
 
     /**
      * Print a node of the tree
-     * @param t
+     * @param t the node to print
      */
     private void print(Node t)
     {
